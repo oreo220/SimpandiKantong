@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function Page(){return <main className="auth-wrap"><section className="auth-card"><Link className="logo" href="/masuk"><span className="logo-mark">k</span>kantong</Link><h1>Tautan tidak tersedia</h1><p className="muted">Tautan atur ulang kata sandi tidak valid atau pemulihan email belum dikonfigurasi.</p><Link className="btn" href="/lupa-kata-sandi">Kembali</Link></section></main>}

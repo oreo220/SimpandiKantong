@@ -1,0 +1,17 @@
+"use client";
+import { useState } from "react";
+import { createTransactionFormAction } from "@/app/actions";
+type WalletOption={id:string;name:string;balance:string;isPrimary:boolean};
+export function TransactionForm({wallets,type}:{wallets:WalletOption[];type:"INCOME"|"EXPENSE"|"TRANSFER"}){
+ const [warning,setWarning]=useState(false);const [allow,setAllow]=useState(false);const [amount,setAmount]=useState("");const [source,setSource]=useState(wallets.find(w=>w.isPrimary)?.id??wallets[0]?.id??"");const [dest,setDest]=useState("");
+ const selected=wallets.find(w=>w.id===source);const insufficient=type==="TRANSFER"&&Number(amount)>Number(selected?.balance??0);
+ return <form action={createTransactionFormAction} className="form" onSubmit={e=>{if(insufficient&&!allow){e.preventDefault();setWarning(true)}}}>
+  <div className="field"><label htmlFor="amount">Nominal (Rp)</label><input id="amount" name="amount" inputMode="numeric" type="number" min="1" max="1000000000" required value={amount} onChange={e=>{setAmount(e.target.value);setAllow(false)}} placeholder="0"/></div>
+  {type!=="TRANSFER"?<div className="field"><label htmlFor="category">Kategori</label><select name="category" id="category" required>{(type==="INCOME"?["Gaji", "Beasiswa", "Hadiah", "Lainnya"]:["Makanan","Transportasi","Belanja","Tagihan","Pendidikan","Kesehatan","Hiburan","Lainnya"]).map(x=><option key={x}>{x}</option>)}</select></div>:<input type="hidden" name="category" value="Transfer"/>}
+  <input type="hidden" name="type" value={type}/><div className="field"><label htmlFor="walletId">{type==="TRANSFER"?"Dari dompet":"Dompet"}</label><select id="walletId" name="walletId" value={source} onChange={e=>{setSource(e.target.value);setAllow(false)}} required>{wallets.map(w=><option key={w.id} value={w.id}>{w.name} · Rp {Number(w.balance).toLocaleString("id-ID")}</option>)}</select></div>
+  {type==="TRANSFER"&&<div className="field"><label htmlFor="destinationWalletId">Ke dompet</label><select id="destinationWalletId" name="destinationWalletId" value={dest} onChange={e=>{setDest(e.target.value);setAllow(false)}} required><option value="">Pilih dompet tujuan</option>{wallets.filter(w=>w.id!==source).map(w=><option key={w.id} value={w.id}>{w.name}</option>)}</select></div>}
+  <div className="field"><label htmlFor="date">Tanggal</label><input id="date" name="date" type="date" required defaultValue={new Date().toLocaleDateString("en-CA")}/></div><div className="field"><label htmlFor="note">Catatan (opsional)</label><textarea id="note" name="note" maxLength={200} placeholder="Tambahkan catatan, maks. 200 karakter"/></div>
+  {warning&&insufficient&&<div className="notice" role="alert"><strong>Saldo sumber kurang.</strong><br/>Saldo tersedia Rp {Number(selected?.balance).toLocaleString("id-ID")}. Setelah transfer, saldo menjadi −Rp {Math.max(0,Number(amount)-Number(selected?.balance)).toLocaleString("id-ID")}. Total semua dompet tetap sama. <button type="button" className="btn btn-light" style={{marginTop:10}} onClick={()=>{setAllow(true);setWarning(false)}}>Tetap transfer</button> <button type="button" className="btn btn-outline" style={{marginTop:10}} onClick={()=>{setAllow(false);setWarning(false)}}>Batal</button></div>}
+  {allow&&<input type="hidden" name="allowNegative" value="true"/>}<button className="btn" disabled={wallets.length===0}>{type==="TRANSFER"?"Transfer":type==="INCOME"?"Simpan pemasukan":"Simpan pengeluaran"}</button>
+ </form>
+}

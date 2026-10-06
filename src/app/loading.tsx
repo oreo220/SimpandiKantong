@@ -1,0 +1,1 @@
+export default function Loading(){return <main className="main" style={{marginLeft:0}} aria-label="Memuat"><div className="card" style={{height:120,marginBottom:18,background:"#edf3f1"}}/><div className="grid content-grid"><div className="card" style={{height:320,background:"#edf3f1"}}/><div className="card" style={{height:320,background:"#edf3f1"}}/></div></main>}

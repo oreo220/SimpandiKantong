@@ -1,0 +1,2 @@
+"use client";
+export default function ErrorPage({reset}:{error:Error&{digest?:string};reset:()=>void}){return <main className="auth-wrap"><section className="auth-card"><div className="logo-mark">!</div><h1>Halaman belum bisa dimuat</h1><p className="muted">Coba muat ulang. Jika masalah berlanjut, coba lagi beberapa saat.</p><button className="btn" onClick={()=>reset()}>Coba lagi</button></section></main>}

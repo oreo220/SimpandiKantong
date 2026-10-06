@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function NotFound(){return <main className="auth-wrap"><section className="auth-card" style={{textAlign:"center"}}><div className="logo-mark" style={{margin:"0 auto"}}>k</div><p className="muted" style={{marginTop:24}}>404 · Halaman tidak ditemukan</p><h1>Sepertinya kamu tersesat</h1><p className="muted">Halaman ini mungkin sudah pindah atau alamatnya salah.</p><Link className="btn" style={{marginTop:14}} href="/dashboard">Kembali ke beranda</Link></section></main>}
